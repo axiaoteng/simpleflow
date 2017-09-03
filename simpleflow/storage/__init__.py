@@ -875,7 +875,6 @@ class Storage(object):
                 clone.results.update(pairs)
             result = self._with_connection(self._save_atom_detail,
                                            source, clone)
-            # return self.injector_name, six.iterkeys(result.results) if result.results else {}
             return self.injector_name, six.iterkeys(result.results)
 
         def save_transient():
