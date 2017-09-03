@@ -56,12 +56,12 @@ class _Alchemist(object):
 
     def atom_query_iter(self, session, parent_uuid):
         query = dbapi.model_query(session, AtomDetail).filter_by(parent_uuid=parent_uuid)
-        for row in query.all():
+        for row in query:
             yield self.convert_atom_detail(row)
 
     def flow_query_iter(self, session, parent_uuid):
         query = dbapi.model_query(session, FlowDetail).filter_by(parent_uuid=parent_uuid)
-        for row in query.all():
+        for row in query:
             yield self.convert_flow_detail(row)
 
     def populate_book(self, session, book):
@@ -108,6 +108,7 @@ class Connection(base.Connection):
                 if not atomdetail:
                     raise exc.NotFound("No atom details found with uuid '%s'" % atom_detail.uuid)
                 e_ad = self._converter.convert_atom_detail(atomdetail)
+                self._update_atom_details(atom_detail, e_ad)
                 return e_ad
         except sa_exc.SQLAlchemyError:
             exc.raise_with_cause(exc.StorageFailure,
