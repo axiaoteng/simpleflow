@@ -14,14 +14,15 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import logging
 import os
 import sys
 import simpleflow.api
+from simpleutil.log import log as logging
 from simpleflow.engines.engine import ParallelActionEngine
 from simpleflow.patterns import graph_flow as gf
 from simpleflow.patterns import linear_flow as lf
 from simpleflow import task
+import simpleflow.engines.engine
 
 import eventlet
 eventlet.monkey_patch()
@@ -30,10 +31,11 @@ from simpleservice.ormdb.engines import create_engine
 from simpleservice.ormdb.orm import get_maker
 from simpleservice.ormdb.argformater import connformater
 
+LOG = logging.getLogger(__name__)
+
 DEBUG = True
 
 if not DEBUG:
-    logging.basicConfig(level=logging.ERROR)
 
     top_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                            os.pardir,
@@ -62,6 +64,7 @@ session = session_maker()
 class Adder(task.Task):
 
     def execute(self, x, y):
+        print 'do!!!', x, y
         return x + y
 
 
@@ -73,15 +76,15 @@ flow = gf.Flow('root').add(
         Adder("add1", provides='x1', rebind=['y1', 'y2'])
     ),
     # x5 = x1+x3 = 20
-    # Adder("add5", provides='x5', rebind=['x1', 'x3']),
-    # # x3 = x1+x2 = 16
-    # Adder("add3", provides='x3', rebind=['x1', 'x2']),
-    # # x4 = x2+y5 = 21
-    # Adder("add4", provides='x4', rebind=['x2', 'y5']),
-    # # x6 = x5+x4 = 41
-    # Adder("add6", provides='x6', rebind=['x5', 'x4']),
-    # # x7 = x6+x6 = 82
-    # Adder("add7", provides='x7', rebind=['x6', 'x6'])
+    Adder("add5", provides='x5', rebind=['x1', 'x3']),
+    # x3 = x1+x2 = 16
+    Adder("add3", provides='x3', rebind=['x1', 'x2']),
+    # x4 = x2+y5 = 21
+    Adder("add4", provides='x4', rebind=['x2', 'y5']),
+    # x6 = x5+x4 = 41
+    Adder("add6", provides='x6', rebind=['x5', 'x4']),
+    # x7 = x6+x6 = 82
+    Adder("add7", provides='x7', rebind=['x6', 'x6'])
 )
 
 # Provide the initial variable inputs using a storage dictionary.
@@ -92,6 +95,8 @@ store = {
     "y4": 7,
     "y5": 9,
 }
+
+result = simpleflow.api.run(session, flow, engine_cls=ParallelActionEngine, store=store)
 
 # This is the expected values that should be created.
 unexpected = 0
@@ -105,9 +110,7 @@ expected = [
     ('x7', 82),
 ]
 
-result = simpleflow.api.run(session, flow, engine_cls=ParallelActionEngine, store=store)
-
-print("Single threaded engine result %s" % result)
+print("Multi threaded engine result %s" % result)
 for (name, value) in expected:
     actual = result.get(name)
     if actual != value:
@@ -116,7 +119,7 @@ for (name, value) in expected:
 
 result = simpleflow.api.run(session, flow, store=store)
 
-print("Multi threaded engine result %s" % result)
+print("Single threaded engine result %s" % result)
 for (name, value) in expected:
     actual = result.get(name)
     if actual != value:
