@@ -84,6 +84,7 @@ class Connection(base.Connection):
         value['parent_uuid'] = parent_uuid
         flowdetail = FlowDetail(**value)
         self.session.add(flowdetail)
+        self.session.flush()
         for ad in fd:
             self._insert_atom_details(ad, fd.uuid)
 
@@ -93,6 +94,7 @@ class Connection(base.Connection):
         value['atom_type'] = middleware.atom_detail_type(ad)
         atomdetail = AtomDetail(**value)
         self.session.add(atomdetail)
+        self.session.flush()
 
     def _update_atom_details(self, ad, e_ad):
         e_ad.merge(ad)
@@ -174,6 +176,7 @@ class Connection(base.Connection):
                     return e_lb
                 else:
                     self.session.add(LogBook(**book.to_dict()))
+                    self.session.flush()
                     for fd in book:
                         self._insert_flow_details(fd, book.uuid)
                     return book
