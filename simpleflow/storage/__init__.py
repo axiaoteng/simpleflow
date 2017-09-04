@@ -719,10 +719,6 @@ class Storage(object):
         """Get all ``execute`` failures that happened with this flow."""
         return self._get_failures(states.EXECUTE)
 
-    # TODO(harlowja): remove these in the future?
-    get = get_execute_result
-    get_failures = get_execute_failures
-
     def get_revert_result(self, atom_name):
         """Gets the ``revert`` results for an atom from storage."""
         try:
