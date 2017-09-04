@@ -105,9 +105,9 @@ class Flow(flow.Flow):
         .. _cyclic: https://en.wikipedia.org/wiki/Cycle_graph
         """
         if not self._graph.has_node(u):
-            raise ValueError("Node '%s' not found to link from" % (u))
+            raise ValueError("Node '%s' not found to link from" % u)
         if not self._graph.has_node(v):
-            raise ValueError("Node '%s' not found to link to" % (v))
+            raise ValueError("Node '%s' not found to link to" % v)
         if decider is not None:
             if not six.callable(decider):
                 raise ValueError("Decider boolean callback must be callable")
