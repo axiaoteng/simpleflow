@@ -14,14 +14,15 @@ f = open(os.path.join(os.path.dirname(__file__), 'README.rst'))
 long_description = f.read()
 f.close()
 
-'enum34'
-'jsonschema!=2.5.0,<3.0.0,>=2.0.0'
 
 setup(
     install_requires=('eventlet>=0.15.2',
-                      'sqlalchemy>=1.0.11',
+                      'jsonschema>=2.0.0',
+                      'jsonschema<3.0.0',
+                      'jsonschema!=2.5.0',
                       'six>=1.9.0',
-                      'networkx>=1.10',
+                      'enum34',
+                      'networkx>=1.9.1',
                       'simpleutil>=1.0.0',
                       'simpleservice>=1.0.0'),
     name='simpleflow',
