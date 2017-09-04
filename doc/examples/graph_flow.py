@@ -13,25 +13,19 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-
 import os
 import sys
-import simpleflow.api
-from simpleutil.log import log as logging
+import eventlet
+
+from simpleflow import task
+from simpleflow import api
+
+from simpleflow.utils.storage_utils import build_session
 from simpleflow.engines.engine import ParallelActionEngine
 from simpleflow.patterns import graph_flow as gf
 from simpleflow.patterns import linear_flow as lf
-from simpleflow import task
-import simpleflow.engines.engine
 
-import eventlet
 eventlet.monkey_patch()
-
-from simpleservice.ormdb.engines import create_engine
-from simpleservice.ormdb.orm import get_maker
-from simpleservice.ormdb.argformater import connformater
-
-LOG = logging.getLogger(__name__)
 
 DEBUG = True
 
@@ -42,24 +36,13 @@ if not DEBUG:
                                            os.pardir))
     sys.path.insert(0, top_dir)
 
-
-
 dst = {'host': '172.20.0.3',
        'port': 3304,
        'schema': 'simpleflow',
        'user': 'root',
        'passwd': '111111'}
 
-sql_connection = connformater % dst
-
-
-from simpleflow.types.dbconver import SimpleFlowConverter
-
-
-engine = create_engine(sql_connection, converter_class=SimpleFlowConverter)
-session_maker = get_maker(engine=engine)
-session = session_maker()
-
+session = build_session(dst)
 
 class Adder(task.Task):
 
@@ -96,7 +79,7 @@ store = {
     "y5": 9,
 }
 
-result = simpleflow.api.run(session, flow, engine_cls=ParallelActionEngine, store=store)
+result = api.run(session, flow, engine_cls=ParallelActionEngine, store=store)
 
 # This is the expected values that should be created.
 unexpected = 0
@@ -117,7 +100,7 @@ for (name, value) in expected:
         sys.stderr.write("%s != %s\n" % (actual, value))
         unexpected += 1
 
-result = simpleflow.api.run(session, flow, store=store)
+result = api.run(session, flow, store=store)
 
 print("Single threaded engine result %s" % result)
 for (name, value) in expected:

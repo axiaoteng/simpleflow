@@ -1,9 +1,26 @@
 from simpleutil.utils import uuidutils
 
+from simpleservice.ormdb.engines import create_engine
+from simpleservice.ormdb.orm import get_maker
+from simpleservice.ormdb.argformater import connformater
+from simpleservice.ormdb.api import MysqlDriver
 from simpleservice.ormdb.tools.utils import init_database
 
+from simpleflow.types.dbconver import SimpleFlowConverter
 from simpleflow.storage import models
 from simpleflow.storage import middleware
+
+
+def build_session(db_info):
+    sql_connection = connformater % db_info
+    engine = create_engine(sql_connection, converter_class=SimpleFlowConverter)
+    session_maker = get_maker(engine=engine)
+    session = session_maker()
+    return session
+
+
+def build_driver(name, conf):
+    return MysqlDriver(name, conf, converter_class=SimpleFlowConverter)
 
 
 def init_simpleflowdb(db_info):
