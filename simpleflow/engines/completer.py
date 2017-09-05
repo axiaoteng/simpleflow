@@ -131,7 +131,7 @@ class Completer(object):
                 atom_state, _atom_intention = atom_states[atom.name]
                 if atom_state == st.FAILURE:
                     self._process_atom_failure(
-                        atom, self._storage.get(atom.name))
+                        atom, self._storage.get_execute_result(atom.name))
             for retry in self._runtime.iterate_retries(st.RETRYING):
                 retry_affected_atoms_it = self._runtime.retry_subflow(retry)
                 for atom, state, intention in retry_affected_atoms_it:
