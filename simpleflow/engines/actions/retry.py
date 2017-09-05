@@ -90,7 +90,7 @@ class RetryAction(base.Action):
     def schedule_reversion(self, retry):
         self.change_state(retry, states.REVERTING)
         arg_addons = {
-            retry_atom.REVERT_FLOW_FAILURES: self._storage.get_failures(),
+            retry_atom.REVERT_FLOW_FAILURES: self._storage.get_execute_failures(),
         }
         return self._retry_executor.revert_retry(
             retry, self._get_retry_args(retry, addons=arg_addons))

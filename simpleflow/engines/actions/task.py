@@ -127,8 +127,8 @@ class TaskAction(base.Action):
             optional_args=task.optional
         )
         task_uuid = self._storage.get_atom_uuid(task.name)
-        task_result = self._storage.get(task.name)
-        failures = self._storage.get_failures()
+        task_result = self._storage.get_execute_result(task.name)
+        failures = self._storage.get_execute_failures()
         if task.notifier.can_be_registered(task_atom.EVENT_UPDATE_PROGRESS):
             progress_callback = functools.partial(self._on_update_progress,
                                                   task)
