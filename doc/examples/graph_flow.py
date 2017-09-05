@@ -13,7 +13,6 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-import os
 import sys
 import eventlet
 
@@ -26,15 +25,6 @@ from simpleflow.patterns import graph_flow as gf
 from simpleflow.patterns import linear_flow as lf
 
 eventlet.monkey_patch()
-
-DEBUG = True
-
-if not DEBUG:
-
-    top_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                           os.pardir,
-                                           os.pardir))
-    sys.path.insert(0, top_dir)
 
 dst = {'host': '172.20.0.3',
        'port': 3304,
