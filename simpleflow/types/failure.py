@@ -489,8 +489,6 @@ class Failure(mixins.StrMixin):
     @classmethod
     def from_dict(cls, data):
         """Converts this from a dictionary to a object."""
-        if isinstance(data, basestring):
-            data = jsonutils.loads_as_bytes(data)
         version = data.pop('version', None)
         if version != cls.DICT_VERSION:
             raise ValueError('Invalid dict version of failure object: %r'
