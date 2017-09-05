@@ -22,6 +22,7 @@ import traceback
 
 from simpleutil.utils import encodeutils
 from simpleutil.utils import reflection
+from simpleutil.utils import jsonutils
 
 from simpleflow import exceptions as exc
 from simpleflow.utils import iter_utils
@@ -488,7 +489,8 @@ class Failure(mixins.StrMixin):
     @classmethod
     def from_dict(cls, data):
         """Converts this from a dictionary to a object."""
-        data = dict(data)
+        if isinstance(data, basestring):
+            data = jsonutils.loads_as_bytes(data)
         version = data.pop('version', None)
         if version != cls.DICT_VERSION:
             raise ValueError('Invalid dict version of failure object: %r'
