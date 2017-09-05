@@ -22,6 +22,7 @@ import six
 
 from simpleutil.utils import timeutils
 from simpleutil.utils import uuidutils
+from simpleutil.utils import jsonutils
 
 from simpleflow import states
 from simpleflow import exceptions as exc
@@ -96,6 +97,12 @@ def _fix_meta(data):
     if not isinstance(meta, dict):
         meta = {}
     return meta
+
+
+def safe_loads(data):
+    if data is None:
+        return data
+    return jsonutils.loads_as_bytes(data)
 
 
 class LogBook(object):
@@ -652,14 +659,14 @@ class AtomDetail(object):
         obj = cls(data['name'], data['uuid'])
         obj.state = data.get('state')
         obj.intention = data.get('intention')
-        obj.results = data.get('results')
-        obj.revert_results = data.get('revert_results')
+        obj.results = safe_loads(data.get('results'))
+        obj.revert_results = safe_loads(data.get('revert_results'))
         obj.version = data.get('version')
         obj.meta = _fix_meta(data)
-        failure = data.get('failure')
+        failure = safe_loads(data.get('failure', '{}'))
         if failure:
             obj.failure = ft.Failure.from_dict(failure)
-        revert_failure = data.get('revert_failure')
+        revert_failure = safe_loads(data.get('revert_failure'))
         if revert_failure:
             obj.revert_failure = ft.Failure.from_dict(revert_failure)
         return obj
