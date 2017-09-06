@@ -481,9 +481,9 @@ class SerialActionEngine(ActionEngine):
 class ParallelActionEngine(ActionEngine):
 
     def __init__(self, flow, flow_detail, connection, options):
-        max_worker = options.pop('max_worker', None) if options else None
+        max_workers = options.pop('max_workers', None) if options else None
         super(ParallelActionEngine, self).__init__(flow, flow_detail,
                                                    connection, options)
         # This ensures that any provided executor will be validated before
         # we get to far in the compilation/execution pipeline...
-        self._task_executor = executor.ParallelGreenThreadTaskExecutor(max_worker)
+        self._task_executor = executor.ParallelGreenThreadTaskExecutor(max_workers)
