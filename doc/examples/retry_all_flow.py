@@ -73,7 +73,7 @@ class A(task.Task):
         # 可有选择性的让成功的节点不回滚
         print '%s revert' % self.name,
         print args, kwargs
-        # 可以在这里抛出异常看看flow在哪里终止,数据库里写了什么内容
+        # 可以在这里抛出异常看看
         # raise Exception('revert error')
 
 
