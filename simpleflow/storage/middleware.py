@@ -666,7 +666,7 @@ class AtomDetail(object):
         obj.revert_results = safe_loads(data.get('revert_results'))
         obj.version = data.get('version')
         obj.meta = _fix_meta(data)
-        failure = safe_loads(data.get('failure', '{}'))
+        failure = safe_loads(data.get('failure'))
         if failure:
             obj.failure = ft.Failure.from_dict(failure)
         revert_failure = safe_loads(data.get('revert_failure'))
