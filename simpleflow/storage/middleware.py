@@ -100,9 +100,12 @@ def _fix_meta(data):
 
 
 def safe_loads(data):
-    if data is None:
+    if not isinstance(data, basestring):
         return data
-    return jsonutils.loads_as_bytes(data)
+    try:
+        return jsonutils.loads_as_bytes(data)
+    except ValueError:
+        return data
 
 
 class LogBook(object):
