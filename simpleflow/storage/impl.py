@@ -79,6 +79,16 @@ class Connection(base.Connection):
         self.session = session
         self._converter = _Alchemist()
 
+    def clear_all(self):
+        try:
+            with self.session.begin():
+                query = dbapi.model_query(self.session, LogBook)
+                for logbook in query:
+                    self.session.delete(logbook)
+        except sa_exc.DBAPIError:
+            exc.raise_with_cause(exc.StorageFailure,
+                                 "Failed clearing all entries")
+
     def _insert_flow_details(self, fd, parent_uuid):
         value = fd.to_dict()
         value['parent_uuid'] = parent_uuid
