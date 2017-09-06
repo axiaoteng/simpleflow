@@ -29,6 +29,7 @@ from simpleflow.utils import iter_utils
 from simpleflow.utils import mixins
 from simpleflow.utils import schema_utils as su
 
+TRACEBACK = False
 
 _exception_message = encodeutils.exception_to_unicode
 
@@ -195,7 +196,7 @@ class Failure(mixins.StrMixin):
                                 % (exc_info[0], type(exc_info[0])))
             self._exception_str = _exception_message(self._exc_info[1])
             self._traceback_str = ''.join(
-                traceback.format_tb(self._exc_info[2]))
+                traceback.format_tb(self._exc_info[2])) if TRACEBACK else None
             self._causes = kwargs.pop('causes', None)
         else:
             self._causes = kwargs.pop('causes', None)
