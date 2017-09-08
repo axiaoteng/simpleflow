@@ -13,7 +13,8 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-
+import time
+import eventlet
 import collections
 
 import six
@@ -201,6 +202,10 @@ class Flow(flow.Flow):
         # Let's try to avoid doing any work if we can; since the below code
         # after this filter can create more temporary graphs that aren't needed
         # if the nodes already exist...
+
+        while self.last_add == time.time():
+            # Avoid Sort bug!
+            eventlet.sleep(0)
         nodes = [i for i in nodes if not self._graph.has_node(i)]
         if not nodes:
             return self
@@ -274,6 +279,7 @@ class Flow(flow.Flow):
                                 required[value].remove(requiree)
 
         self._swap(tmp_graph)
+        self.last_add = time.time()
         return self
 
     def _get_subgraph(self):
