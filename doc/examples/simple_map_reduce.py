@@ -78,9 +78,6 @@ SPLIT = 10
 CHUNK_SIZE = UPPER_BOUND // SPLIT
 
 # This will be the workflow we will compose and run.
-# 这里已经不可以使用linear_flow
-# linear_flow只能从store中读取输入
-# 不能通过atom的provides来传递参数
 gflow = gf.Flow("root")
 # The mappers will run in parallel.
 store = {}
