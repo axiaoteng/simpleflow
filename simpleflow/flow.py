@@ -66,7 +66,6 @@ class Flow(object):
         # the name of its owner will be assigned
         if self._retry is not None and self._retry.name is None:
             self._retry.name = self.name + "_retry"
-        self.last_add = None
 
     @property
     def name(self):

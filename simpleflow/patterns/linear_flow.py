@@ -43,9 +43,6 @@ class Flow(flow.Flow):
 
     def add(self, *items):
         """Adds a given task/tasks/flow/flows to this flow."""
-        while self.last_add == time.time():
-            # Avoid Sort bug!
-            eventlet.sleep(0)
         for item in items:
             if not self._graph.has_node(item):
                 self._graph.add_node(item)
@@ -53,7 +50,6 @@ class Flow(flow.Flow):
                     self._graph.add_edge(self._last_item, item,
                                          attr_dict={flow.LINK_INVARIANT: True})
                 self._last_item = item
-        self.last_add = time.time()
         return self
 
     def __len__(self):
