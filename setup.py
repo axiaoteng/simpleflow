@@ -22,7 +22,7 @@ setup(
                       'jsonschema!=2.5.0',
                       'six>=1.9.0',
                       'enum34',
-                      'networkx>=1.9.1',
+                      'networkx>=1.9.2',
                       'simpleutil>=1.0.0',
                       'simpleservice>=1.0.0'),
     name='simpleflow',

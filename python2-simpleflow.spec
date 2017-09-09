@@ -23,7 +23,7 @@ Requires:       python-jsonschema != 2.5.0
 Requires:       python-jsonschema <3.0.0
 Requires:       python-six >= 1.9.0
 Requires:       python-enum34
-Requires:       python-networkx >= 1.9.1
+Requires:       python-networkx >= 1.9.2
 Requires:       python-networkx < 2.0
 Requires:       python-simpleutil > 1.0
 Requires:       python-simpleservice-ormdb > 1.0
