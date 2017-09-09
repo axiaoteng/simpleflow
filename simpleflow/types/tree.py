@@ -261,7 +261,7 @@ class Node(object):
 
         **Example**::
 
-            >>> from taskflow.types import tree
+            >>> from simpleflow.types import tree
             >>> yahoo = tree.Node("CEO")
             >>> yahoo.add(tree.Node("Infra"))
             >>> yahoo[0].add(tree.Node("Boss"))
