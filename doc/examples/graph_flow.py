@@ -26,13 +26,8 @@ from simpleflow.patterns import linear_flow as lf
 
 eventlet.monkey_patch()
 
-dst = {'host': '172.20.0.3',
-       'port': 3304,
-       'schema': 'simpleflow',
-       'user': 'root',
-       'passwd': '111111'}
 
-session = build_session(dst)
+session = build_session()
 
 class Adder(task.Task):
 

@@ -1,5 +1,6 @@
 """Converting MySQL and Python types
 """
+import sqlite3
 
 from simpleutil.utils import jsonutils
 
@@ -19,3 +20,10 @@ class SimpleFlowConverter(MySQLConverter):
 
     def _set_to_mysql(self, value):
         return jsonutils.dumps(list(value))
+
+
+def SimpleFlowSqliteConverter():
+    sqlite3.register_adapter(list, jsonutils.dumps)
+    sqlite3.register_adapter(tuple, lambda x: jsonutils.dumps(list(x)))
+    sqlite3.register_adapter(set, lambda x: jsonutils.dumps(list(x)))
+    sqlite3.register_adapter(dict, jsonutils.dumps)

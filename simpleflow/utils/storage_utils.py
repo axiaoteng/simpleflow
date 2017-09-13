@@ -7,20 +7,23 @@ from simpleservice.ormdb.api import MysqlDriver
 from simpleservice.ormdb.tools.utils import init_database
 
 from simpleflow.types.dbconver import SimpleFlowConverter
+from simpleflow.types.dbconver import SimpleFlowSqliteConverter
 from simpleflow.storage import models
 from simpleflow.storage import middleware
 
 
 def build_session(db_info=None):
-    if db_info is None:
-        engine=create_engine(sql_connection='sqlite:///:memory:',logging_name='taskflow')
-        models.SimpleFlowTables.metadata.create_all(engine)
-        session_maker = get_maker(engine)
-        session = session_maker()
-    else:
+    if isinstance(db_info, dict):
         sql_connection = connformater % db_info
         engine = create_engine(sql_connection, converter_class=SimpleFlowConverter)
         session_maker = get_maker(engine=engine)
+        session = session_maker()
+    else:
+        SimpleFlowSqliteConverter()
+        path = db_info if db_info else '/:memory:'
+        engine=create_engine(sql_connection='sqlite://%s' % path,logging_name='taskflow')
+        models.SimpleFlowTables.metadata.create_all(engine)
+        session_maker = get_maker(engine)
         session = session_maker()
     return session
 
