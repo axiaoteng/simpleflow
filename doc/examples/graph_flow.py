@@ -26,8 +26,14 @@ from simpleflow.patterns import linear_flow as lf
 
 eventlet.monkey_patch()
 
-
-session = build_session()
+dst = {'host': '172.20.0.3',
+       'port': 3304,
+       'schema': 'simpleflow',
+       'user': 'root',
+       'passwd': '111111'}
+from simpleservice.ormdb.argformater import connformater
+sql_connection = connformater % dst
+session = build_session(sql_connection)
 
 class Adder(task.Task):
 

@@ -16,9 +16,9 @@ dst = {'host': '172.20.0.3',
        'schema': 'simpleflow',
        'user': 'root',
        'passwd': '111111'}
-
-
-session = build_session(dst)
+from simpleservice.ormdb.argformater import connformater
+sql_connection = connformater % dst
+session = build_session(sql_connection)
 
 
 def choise_fail(src_list):
