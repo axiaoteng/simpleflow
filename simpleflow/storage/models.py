@@ -15,11 +15,11 @@
 #    under the License.
 import sqlalchemy as sa
 from sqlalchemy.ext import declarative
-from sqlalchemy.dialects.mysql import DATETIME
-from sqlalchemy.dialects.mysql import VARCHAR
-from sqlalchemy.dialects.mysql import CHAR
-from sqlalchemy.dialects.mysql import ENUM
-from sqlalchemy.dialects.mysql import TEXT
+from sqlalchemy import DATETIME
+from sqlalchemy import VARCHAR
+from sqlalchemy import CHAR
+from sqlalchemy import Enum
+from sqlalchemy import UnicodeText
 
 from simpleutil.utils import timeutils
 from simpleutil.utils import uuidutils
@@ -42,7 +42,7 @@ VERSION_LENGTH = 64
 class LogBook(SimpleFlowTables):
     created_at = sa.Column(DATETIME, default=timeutils.utcnow)
     updated_at = sa.Column(DATETIME, onupdate=timeutils.utcnow)
-    meta = sa.Column(TEXT)
+    meta = sa.Column(UnicodeText)
     name = sa.Column(VARCHAR(NAME_LENGTH))
     uuid = sa.Column(CHAR(UUID_LENGTH), primary_key=True, nullable=False,
                      default=uuidutils.generate_uuid)
@@ -56,7 +56,7 @@ class FlowDetail(SimpleFlowTables):
     created_at = sa.Column(DATETIME, default=timeutils.utcnow)
     updated_at = sa.Column(DATETIME, onupdate=timeutils.utcnow)
     parent_uuid = sa.Column(sa.ForeignKey('logbooks.uuid', ondelete='CASCADE'))
-    meta = sa.Column(TEXT)
+    meta = sa.Column(UnicodeText)
     name = sa.Column(VARCHAR(NAME_LENGTH))
     state = sa.Column(VARCHAR(STATE_LENGTH))
     uuid = sa.Column(CHAR(UUID_LENGTH), primary_key=True, nullable=False,
@@ -70,20 +70,20 @@ class FlowDetail(SimpleFlowTables):
 class AtomDetail(SimpleFlowTables):
     created_at = sa.Column(DATETIME, default=timeutils.utcnow)
     updated_at = sa.Column(DATETIME, onupdate=timeutils.utcnow)
-    meta = sa.Column(TEXT)
+    meta = sa.Column(UnicodeText)
     parent_uuid = sa.Column(sa.ForeignKey('flowdetails.uuid', ondelete='CASCADE'))
     name = sa.Column(VARCHAR(NAME_LENGTH))
     version = sa.Column(VARCHAR(VERSION_LENGTH))
     state = sa.Column(VARCHAR(STATE_LENGTH))
     uuid = sa.Column(CHAR(UUID_LENGTH), primary_key=True, nullable=False,
                      default=uuidutils.generate_uuid)
-    failure = sa.Column(TEXT)
-    results = sa.Column(TEXT)
-    revert_results = sa.Column(TEXT)
-    revert_failure = sa.Column(TEXT)
-    atom_type = sa.Column(ENUM(*middleware.ATOM_TYPES,
+    failure = sa.Column(UnicodeText)
+    results = sa.Column(UnicodeText)
+    revert_results = sa.Column(UnicodeText)
+    revert_failure = sa.Column(UnicodeText)
+    atom_type = sa.Column(Enum(*middleware.ATOM_TYPES,
                                name='atom_types'))
-    intention = sa.Column(ENUM(*states.INTENTIONS,
+    intention = sa.Column(Enum(*states.INTENTIONS,
                                name='intentionS'))
 
     __table_args__ = (

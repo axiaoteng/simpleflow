@@ -11,11 +11,17 @@ from simpleflow.storage import models
 from simpleflow.storage import middleware
 
 
-def build_session(db_info):
-    sql_connection = connformater % db_info
-    engine = create_engine(sql_connection, converter_class=SimpleFlowConverter)
-    session_maker = get_maker(engine=engine)
-    session = session_maker()
+def build_session(db_info=None):
+    if db_info is None:
+        engine=create_engine(sql_connection='sqlite:///:memory:',logging_name='taskflow')
+        models.SimpleFlowTables.metadata.create_all(engine)
+        session_maker = get_maker(engine)
+        session = session_maker()
+    else:
+        sql_connection = connformater % db_info
+        engine = create_engine(sql_connection, converter_class=SimpleFlowConverter)
+        session_maker = get_maker(engine=engine)
+        session = session_maker()
     return session
 
 
