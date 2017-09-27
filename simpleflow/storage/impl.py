@@ -160,7 +160,7 @@ class Connection(base.Connection):
         try:
             with self.session.begin():
                 query = dbapi.model_query(self.session, LogBook).filter_by(uuid=book_uuid)
-                if query.delete().rowcount == 0:
+                if query.delete() == 0:
                     raise exc.NotFound("No logbook found with uuid '%s'" % book_uuid)
         except sa_exc.DBAPIError:
             exc.raise_with_cause(exc.StorageFailure,
