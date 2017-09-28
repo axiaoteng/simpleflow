@@ -76,7 +76,7 @@ def _revert_task(task, arguments, result, failures, progress_callback=None):
     return (REVERTED, result)
 
 
-class Executor(object):
+class _Executor(object):
 
     def __init__(self, executor=None):
         self._executor = executor
@@ -105,9 +105,8 @@ class Executor(object):
             self._executor = None
 
 
-class SerialRetryExecutor(Executor):
+class SerialRetryExecutor(_Executor):
     """Executes and reverts retries."""
-
 
     def execute_retry(self, retry, arguments):
         """Schedules retry execution."""
@@ -122,7 +121,7 @@ class SerialRetryExecutor(Executor):
         return fut
 
 
-class TaskExecutor(Executor):
+class _TaskExecutor(_Executor):
     """Executes and reverts tasks.
 
     This class takes task and its arguments and executes or reverts it.
@@ -145,11 +144,11 @@ class TaskExecutor(Executor):
                                  failures, progress_callback=progress_callback)
 
 
-class SerialTaskExecutor(TaskExecutor):
+class SerialTaskExecutor(_TaskExecutor):
     """Executes tasks one after another."""
 
 
-class ParallelGreenThreadTaskExecutor(TaskExecutor):
+class ParallelGreenThreadTaskExecutor(_TaskExecutor):
     """Executes tasks in parallel using a greenthread pool executor."""
 
     MAX_WORKERS = 1000
