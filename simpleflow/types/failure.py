@@ -27,7 +27,6 @@ from simpleutil.utils import jsonutils
 from simpleflow import exceptions as exc
 from simpleflow.utils import iter_utils
 from simpleflow.utils import mixins
-from simpleflow.utils import schema_utils as su
 
 TRACEBACK = False
 
@@ -224,8 +223,8 @@ class Failure(mixins.StrMixin):
     def validate(cls, data):
         """Validate input data matches expected failure ``dict`` format."""
         try:
-            su.schema_validate(data, cls.SCHEMA)
-        except su.ValidationError as e:
+            jsonutils.schema_validate(data, cls.SCHEMA)
+        except jsonutils.ValidationError as e:
             raise exc.InvalidFormat("Failure data not of the"
                                     " expected format: %s" % (e.message), e)
         else:
