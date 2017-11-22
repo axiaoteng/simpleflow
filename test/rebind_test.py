@@ -6,8 +6,8 @@ from six.moves import zip as compat_zip
 
 from simpleflow.atom import _build_rebind_dict
 
-req_args = ['timeout', 'file']
+req_args = ['file', 'timeout']
 
-rebind_args = ['download_timeout']
+rebind_args = ['updatefile', 'timeout']
 
 print _build_rebind_dict(req_args, rebind_args)
