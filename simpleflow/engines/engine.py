@@ -318,11 +318,11 @@ class ActionEngine(base.Engine):
                             self.suspend()
             except Exception:
                 with excutils.save_and_reraise_exception():
-                    LOG.exception("Engine execution has failed, something"
-                                  " bad must of happened (last"
-                                  " %s machine transitions were %s)",
-                                  last_transitions.maxlen,
-                                  list(last_transitions))
+                    LOG.error("Engine execution has failed, something"
+                              " bad must of happened (last"
+                              " %s machine transitions were %s)",
+                              last_transitions.maxlen,
+                              list(last_transitions))
                     self._change_state(states.FAILURE)
             else:
                 if last_transitions:
