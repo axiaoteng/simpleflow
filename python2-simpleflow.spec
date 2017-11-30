@@ -27,6 +27,7 @@ Requires:       python-networkx < 2.0
 Requires:       python-simpleutil >= 1.0
 Requires:       python-simpleutil < 1.1
 Requires:       python-simpleservice-ormdb > 1.0
+Requires:       python-simpleservice-ormdb < 1.1
 
 
 %description

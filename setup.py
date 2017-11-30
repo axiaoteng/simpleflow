@@ -5,7 +5,7 @@ import os
 from simpleflow import __version__
 
 try:
-    from setuptools import setup
+    from setuptools import setup, find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -17,14 +17,14 @@ f.close()
 
 setup(
     install_requires=('eventlet>=0.15.2',
-                      'jsonschema>=2.0.0',
-                      'jsonschema<3.0.0',
-                      'jsonschema!=2.5.0',
                       'six>=1.9.0',
                       'enum34',
                       'networkx>=1.9.2',
-                      'simpleutil>=1.0.0',
-                      'simpleservice>=1.0.0'),
+                      'simpleutil>=1.0',
+                      'simpleutil<1.1',
+                      'simpleservice>=1.0',
+                      'simpleservice<1.0',
+                      ),
     name='simpleflow',
     version=__version__,
     description='a simple copy of taskflow 1.30 from openstack',
@@ -36,7 +36,7 @@ setup(
     maintainer_email='lolizeppelin@gmail.com',
     keywords=['simpleflow'],
     license='MIT',
-    packages=['simpleflow'],
+    packages=find_packages(include=['simpleflow*']),
     # tests_require=['pytest>=2.5.0'],
     # cmdclass={'test': PyTest},
     classifiers=[
