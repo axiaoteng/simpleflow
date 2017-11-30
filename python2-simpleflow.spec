@@ -3,9 +3,11 @@
 
 %define proj_name simpleflow
 
+%define _release RELEASEVERSION
+
 Name:           python-%{proj_name}
-Version:        1.0.0
-Release:        0%{?dist}
+Version:        RPMVERSION
+Release:        %{_release}%{?dist}
 Summary:        simpleutil copy from openstack
 Group:          Development/Libraries
 License:        MPLv1.1 or GPLv2
@@ -18,14 +20,12 @@ BuildRequires:  python-setuptools >= 11.0
 
 Requires:       python >= 2.6.6
 Requires:       python < 3.0
-Requires:       python-jsonschema >=2.0.0
-Requires:       python-jsonschema != 2.5.0
-Requires:       python-jsonschema <3.0.0
 Requires:       python-six >= 1.9.0
 Requires:       python-enum34
 Requires:       python-networkx >= 1.9.2
 Requires:       python-networkx < 2.0
-Requires:       python-simpleutil > 1.0
+Requires:       python-simpleutil >= 1.0
+Requires:       python-simpleutil < 1.1
 Requires:       python-simpleservice-ormdb > 1.0
 
 
@@ -50,8 +50,9 @@ rm -rf %{proj_name}.egg-info
 
 %files
 %defattr(-,root,root,-)
-%dir %{python_sitelib}/%{proj_name}*
-%{python_sitelib}/%{proj_name}*/*
+%{python_sitelib}/%{proj_name}/*
+%{python_sitelib}/%{proj_name}-%{version}-*.egg-info/*
+%dir %{python_sitelib}/%{proj_name}-%{version}-*.egg-info/
 %doc README.rst
 %doc doc/*
 
