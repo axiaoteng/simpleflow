@@ -3,7 +3,7 @@ simpleflow
 
 通用工作流数库
 
-主要代码基于Openstack Mitaka中的taskflow 2.14
+简化自Openstack通用库taskflow 2.14
 
 python2.7以上networkx使用>1.10的官方版即可
 
