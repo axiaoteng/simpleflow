@@ -16,7 +16,7 @@ f.close()
 
 
 setup(
-    install_requires=('eventlet>=0.15.2',
+    install_requires=('eventlet>=0.18.4',
                       'six>=1.9.0',
                       'enum34',
                       'networkx>=1.9.2',
