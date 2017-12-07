@@ -85,6 +85,7 @@ class Connection(base.Connection):
                 query = dbapi.model_query(self.session, LogBook)
                 for logbook in query:
                     self.session.delete(logbook)
+                    self.session.flush()
         except sa_exc.DBAPIError:
             exc.raise_with_cause(exc.StorageFailure,
                                  "Failed clearing all entries")
@@ -170,6 +171,7 @@ class Connection(base.Connection):
         try:
             with self.session.begin():
                 query = dbapi.model_query(self.session, LogBook).filter_by(uuid=book.uuid)
+
                 logbook = query.one_or_none()
                 if logbook:
                     e_lb = self._converter.convert_book(logbook)

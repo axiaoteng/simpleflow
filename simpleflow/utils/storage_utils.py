@@ -18,13 +18,15 @@ def build_session(connection):
                                logging_name='taskflow')
         session_maker = get_maker(engine=engine)
         session = session_maker()
-    else:
+    elif connection.startswith('sqlite'):
         SimpleFlowSqliteConverter()
         engine=create_engine(sql_connection=connection,
                              logging_name='taskflow')
         models.SimpleFlowTables.metadata.create_all(engine)
         session_maker = get_maker(engine)
         session = session_maker()
+    else:
+        raise TypeError('Connection type error for simpleflow')
     return session
 
 
