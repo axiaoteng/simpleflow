@@ -20,6 +20,7 @@ import os
 import sys
 import traceback
 
+from simpleutil.log import log as logging
 from simpleutil.utils import encodeutils
 from simpleutil.utils import reflection
 from simpleutil.utils import jsonutils
@@ -28,7 +29,7 @@ from simpleflow import exceptions as exc
 from simpleflow.utils import iter_utils
 from simpleflow.utils import mixins
 
-TRACEBACK = False
+LOG = logging.getLogger(__name__)
 
 _exception_message = encodeutils.exception_to_unicode
 
@@ -195,7 +196,7 @@ class Failure(mixins.StrMixin):
                                 % (exc_info[0], type(exc_info[0])))
             self._exception_str = _exception_message(self._exc_info[1])
             self._traceback_str = ''.join(
-                traceback.format_tb(self._exc_info[2])) if TRACEBACK else None
+                traceback.format_tb(self._exc_info[2])) if LOG.isEnabledFor(logging.DEBUG) else None
             self._causes = kwargs.pop('causes', None)
         else:
             self._causes = kwargs.pop('causes', None)
