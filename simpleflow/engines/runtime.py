@@ -142,9 +142,8 @@ class Runtime(object):
             metadata['scheduler'] = scheduler
             metadata['edge_deciders'] = tuple(deciders_it)
             metadata['action'] = action
-            if LOG.isEnabledFor(logging.DEBUG):
-                LOG.trace("Compiled %s metadata for node %s (%s)",
-                          metadata, node.name, node_kind)
+            LOG.trace("Compiled %s metadata for node %s (%s)",
+                      metadata, node.name, node_kind)
             self._atom_cache[node.name] = metadata
         # TODO(harlowja): optimize the different decider depths to avoid
         # repeated full successor searching; this can be done by searching
