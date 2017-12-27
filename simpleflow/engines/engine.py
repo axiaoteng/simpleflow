@@ -13,7 +13,7 @@
 #    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 #    License for the specific language governing permissions and limitations
 #    under the License.
-
+import re
 import six
 import collections
 import contextlib
@@ -318,10 +318,14 @@ class ActionEngine(base.Engine):
                             self.suspend()
             except Exception:
                 with excutils.save_and_reraise_exception():
+                    if not hasattr(last_transitions, 'maxlen'):
+                        maxlen = int(re.match("^.*?maxlen=([0-9]+)\)$", str(last_transitions)).group(1))
+                    else:
+                        maxlen = last_transitions.maxlen
                     LOG.error("Engine execution has failed, something"
                               " bad must of happened (last"
                               " %s machine transitions were %s)",
-                              last_transitions.maxlen,
+                              maxlen,
                               list(last_transitions))
                     self._change_state(states.FAILURE)
             else:
