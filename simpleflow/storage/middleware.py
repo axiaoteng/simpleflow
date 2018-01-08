@@ -629,11 +629,11 @@ class AtomDetail(object):
         :returns: this atom detail in ``dict`` form
         """
         if self.failure:
-            failure = self.failure.to_dict()
+            failure = jsonutils.safe_dumps(self.failure.to_dict())
         else:
             failure = None
         if self.revert_failure:
-            revert_failure = self.revert_failure.to_dict()
+            revert_failure = jsonutils.safe_dumps(self.revert_failure.to_dict())
         else:
             revert_failure = None
         return {
@@ -641,8 +641,8 @@ class AtomDetail(object):
             'revert_failure': revert_failure,
             'meta': self.meta,
             'name': self.name,
-            'results': self.results,
-            'revert_results': self.revert_results,
+            'results': jsonutils.safe_dumps(self.results),
+            'revert_results': jsonutils.safe_dumps(self.revert_results),
             'state': self.state,
             'version': self.version,
             'intention': self.intention,
@@ -1009,7 +1009,8 @@ class RetryDetail(AtomDetail):
             return new_results
 
         base = super(RetryDetail, self).to_dict()
-        base['results'] = encode_results(base.get('results'))
+        # base['results'] = encode_results(base.get('results'))
+        base['results'] = jsonutils.safe_dumps(encode_results(self.results))
         return base
 
     def merge(self, other, deep_copy=False):
