@@ -24,7 +24,7 @@ from simpleflow.engines.engine import ParallelActionEngine
 from simpleflow.patterns import graph_flow as gf
 from simpleflow.patterns import linear_flow as lf
 
-eventlet.monkey_patch()
+# eventlet.monkey_patch()
 
 dst = {'host': '172.20.0.3',
        'port': 3304,

@@ -22,7 +22,7 @@ import six
 
 from simpleutil.utils import timeutils
 from simpleutil.utils import uuidutils
-from simpleutil.utils import jsonutils
+# from simpleutil.utils import jsonutils
 
 from simpleflow import states
 from simpleflow import exceptions as exc
@@ -99,13 +99,13 @@ def _fix_meta(data):
     return meta
 
 
-def safe_loads(data):
-    if not isinstance(data, basestring):
-        return data
-    try:
-        return jsonutils.loads_as_bytes(data)
-    except ValueError:
-        return data
+# def safe_loads(data):
+#     if not isinstance(data, basestring):
+#         return data
+#     try:
+#         return jsonutils.loads_as_bytes(data)
+#     except ValueError:
+#         return data
 
 
 class LogBook(object):
@@ -629,11 +629,13 @@ class AtomDetail(object):
         :returns: this atom detail in ``dict`` form
         """
         if self.failure:
-            failure = jsonutils.safe_dumps(self.failure.to_dict())
+            # failure = jsonutils.safe_dumps(self.failure.to_dict())
+            failure = self.failure.to_dict()
         else:
             failure = None
         if self.revert_failure:
-            revert_failure = jsonutils.safe_dumps(self.revert_failure.to_dict())
+            # revert_failure = jsonutils.safe_dumps(self.revert_failure.to_dict())
+            revert_failure = self.revert_failure.to_dict()
         else:
             revert_failure = None
         return {
@@ -641,8 +643,10 @@ class AtomDetail(object):
             'revert_failure': revert_failure,
             'meta': self.meta,
             'name': self.name,
-            'results': jsonutils.safe_dumps(self.results),
-            'revert_results': jsonutils.safe_dumps(self.revert_results),
+            'results': self.results,
+            # 'results': jsonutils.safe_dumps(self.results),
+            'revert_results': self.revert_results,
+            # 'revert_results': jsonutils.safe_dumps(self.revert_results),
             'state': self.state,
             'version': self.version,
             'intention': self.intention,
@@ -662,14 +666,18 @@ class AtomDetail(object):
         obj = cls(data['name'], data['uuid'])
         obj.state = data.get('state')
         obj.intention = data.get('intention')
-        obj.results = safe_loads(data.get('results'))
-        obj.revert_results = safe_loads(data.get('revert_results'))
+        # obj.results = safe_loads(data.get('results'))
+        obj.results = data.get('results')
+        obj.revert_results = data.get('revert_results')
+        # obj.revert_results = safe_loads(data.get('revert_results'))
         obj.version = data.get('version')
         obj.meta = _fix_meta(data)
-        failure = safe_loads(data.get('failure'))
+        # failure = safe_loads(data.get('failure'))
+        failure = data.get('failure')
         if failure:
             obj.failure = ft.Failure.from_dict(failure)
-        revert_failure = safe_loads(data.get('revert_failure'))
+        # revert_failure = safe_loads(data.get('revert_failure'))
+        revert_failure = data.get('revert_failure')
         if revert_failure:
             obj.revert_failure = ft.Failure.from_dict(revert_failure)
         return obj
@@ -1010,7 +1018,8 @@ class RetryDetail(AtomDetail):
 
         base = super(RetryDetail, self).to_dict()
         # base['results'] = encode_results(base.get('results'))
-        base['results'] = jsonutils.safe_dumps(encode_results(self.results))
+        # base['results'] = jsonutils.safe_dumps(encode_results(self.results))
+        base['results'] = encode_results(self.results)
         return base
 
     def merge(self, other, deep_copy=False):
