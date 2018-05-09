@@ -22,13 +22,21 @@ import six
 
 from simpleutil.utils import timeutils
 from simpleutil.utils import uuidutils
-# from simpleutil.utils import jsonutils
+from simpleutil.utils import jsonutils
 
 from simpleflow import states
 from simpleflow import exceptions as exc
 from simpleflow.utils import misc
 from simpleflow.types import failure as ft
 
+
+def safe_loads(data):
+    if not isinstance(data, basestring):
+        return data
+    try:
+        return jsonutils.safe_loads_as_bytes(data)
+    except ValueError:
+        return data
 
 # Internal helpers...
 
@@ -93,19 +101,11 @@ def _fix_meta(data):
     # Handle the case where older schemas allowed this to be non-dict by
     # correcting this case by replacing it with a dictionary when a non-dict
     # is found.
-    meta = data.get('meta')
+    meta = safe_loads(data.get('meta'))
     if not isinstance(meta, dict):
         meta = {}
     return meta
 
-
-# def safe_loads(data):
-#     if not isinstance(data, basestring):
-#         return data
-#     try:
-#         return jsonutils.loads_as_bytes(data)
-#     except ValueError:
-#         return data
 
 
 class LogBook(object):
@@ -666,14 +666,14 @@ class AtomDetail(object):
         obj = cls(data['name'], data['uuid'])
         obj.state = data.get('state')
         obj.intention = data.get('intention')
-        # obj.results = safe_loads(data.get('results'))
-        obj.results = data.get('results')
-        obj.revert_results = data.get('revert_results')
-        # obj.revert_results = safe_loads(data.get('revert_results'))
+        obj.results = safe_loads(data.get('results'))
+        # obj.results = data.get('results')
+        # obj.revert_results = data.get('revert_results')
+        obj.revert_results = safe_loads(data.get('revert_results'))
         obj.version = data.get('version')
         obj.meta = _fix_meta(data)
-        # failure = safe_loads(data.get('failure'))
-        failure = data.get('failure')
+        failure = safe_loads(data.get('failure'))
+        # failure = data.get('failure')
         if failure:
             obj.failure = ft.Failure.from_dict(failure)
         # revert_failure = safe_loads(data.get('revert_failure'))
