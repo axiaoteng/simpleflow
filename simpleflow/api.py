@@ -114,6 +114,17 @@ def save_factory_details(flow_detail,
 def load(connection,
          flow, flow_detail=None, book=None, store=None,
          engine_cls=SerialActionEngine, **options):
+    """
+    :param connection: Store connection
+    :param flow: flow to load
+    :param flow_detail: FlowDetail that holds the state of the flow (if one is
+        not provided then one will be created for you in the provided backend)
+    :param book: LogBook to create flow detail in if flow_detail is None
+    :param store: dict -- data to put to storage to satisfy flow requirements
+    :param engine_cls: engine class
+    :param options: options for engine
+    :returns: engine
+    """
 
     if flow_detail is None:
         flow_detail = p_utils.create_flow_detail(flow, book=book,
